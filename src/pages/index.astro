@@ -1,0 +1,122 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '../layouts/Layout.astro';
+import Chat from '../components/Chat.tsx';
+import photo from '../assets/titouan.jpg';
+
+const experiences = [
+	{
+		period: '2024 — auj.',
+		title: 'Lead Data Scientist',
+		place: 'DGFiP, Délégation à la Transformation du Numérique',
+		description:
+			"Accompagnement des projets IA à destination des agents, travaux sur chatbot pour particuliers. Assistance technique à la plateforme mettant à disposition les modèles LLM.",
+	},
+	{
+		period: '2022 — 2024',
+		title: 'Data Scientist',
+		place: 'Health Data Hub',
+		description:
+			'Travaux sur le NLP en santé (pseudonymisation, structuration information, webscraping) et projet avec un médecin de l\'hôpital Saint-Antoine (détection hépatite).',
+	},
+	{
+		period: '2021 — 2022',
+		title: 'Data Scientist',
+		place: "SSP Lab de l'INSEE",
+		description:
+			"Préfigurateur du réseau des Data Scientists du Service Statistique Public.",
+	},
+	{
+		period: '2019 — 2021',
+		title: "Adjoint du Département de l'Insertion Professionnelle",
+		place: 'Dares, service statistique du ministère du Travail',
+		description:
+			"Suivi conjoncturel et évaluation économétrique des politiques de l'emploi. Évaluation de Territoires Zéro Chômeur de Longue Durée. Co-encadrement de 9 chargés d'études.",
+	},
+	{
+		period: '2016 — 2018',
+		title: "Chargé d'études",
+		place: 'Direction Générale du Trésor, bureau Politiques économiques et risques internationaux',
+		description:
+			"Étude des évolutions structurelles de l'économie mondiale, évaluation des effets macroéconomiques du Brexit.",
+	},
+];
+
+const formations = [
+	{
+		period: '2015 — 2016',
+		title: 'Master International Trade, Finance and Development',
+		place: 'Barcelona GSE / Pompeu Fabra',
+		description: 'Cursus en anglais.',
+	},
+	{
+		period: '2014 — 2015',
+		title: "Corps des administrateurs de l'INSEE",
+		place: 'ENSAE ParisTech',
+		description:
+			'Projet au bureau Polsoc3 de la DG Trésor sur les déterminants de la pauvreté.',
+	},
+	{
+		period: '2011 — 2015',
+		title: 'École Polytechnique',
+		place: null,
+		description:
+			'M1 en économie appliquée à l\'environnement : « Sciences pour les Défis de l\'Environnement ».',
+	},
+];
+---
+
+<Layout title="Titouan Blaize">
+	<main class="mx-auto max-w-3xl px-6 py-16">
+		<header class="mb-14 flex flex-col-reverse items-center gap-8 sm:flex-row sm:items-center sm:justify-between">
+			<div>
+				<h1 class="text-4xl font-bold text-stone-900">Titouan Blaize</h1>
+				<p class="mt-2 text-stone-600">
+					Administrateur de l'INSEE — statisticien public & économiste.
+				</p>
+			</div>
+			<div class="h-32 w-32 shrink-0 overflow-hidden rounded-full ring-4 ring-white shadow-md sm:h-40 sm:w-40">
+				<Image
+					src={photo}
+					alt="Portrait de Titouan Blaize"
+					width={480}
+					height={480}
+					class="h-full w-full object-cover"
+				/>
+			</div>
+		</header>
+
+		<section class="mb-16">
+			<h2 class="text-xl font-semibold mb-4 text-emerald-800">Pose-moi une question</h2>
+			<Chat client:load />
+		</section>
+
+		<section class="mb-16">
+			<h2 class="text-xl font-semibold mb-4 text-emerald-800">Expériences professionnelles</h2>
+			<div class="space-y-6">
+				{experiences.map((xp) => (
+					<div class="border-l-2 border-emerald-200 pl-4">
+						<p class="text-sm font-medium text-stone-500">{xp.period}</p>
+						<h3 class="font-semibold text-stone-900">{xp.title}</h3>
+						<p class="text-sm text-stone-600">{xp.place}</p>
+						<p class="mt-1 text-stone-700">{xp.description}</p>
+					</div>
+				))}
+			</div>
+		</section>
+
+		<section>
+			<h2 class="text-xl font-semibold mb-4 text-emerald-800">Formation</h2>
+			<div class="space-y-6">
+				{formations.map((f) => (
+					<div class="border-l-2 border-emerald-200 pl-4">
+						<p class="text-sm font-medium text-stone-500">{f.period}</p>
+						<h3 class="font-semibold text-stone-900">{f.title}</h3>
+						{f.place && <p class="text-sm text-stone-600">{f.place}</p>}
+						<p class="mt-1 text-stone-700">{f.description}</p>
+					</div>
+				))}
+			</div>
+		</section>
+	</main>
+</Layout>
