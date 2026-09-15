@@ -3,15 +3,9 @@ import ReactMarkdown from 'react-markdown';
 
 const API_URL = import.meta.env.PUBLIC_API_URL as string;
 
-interface Source {
-	source: string;
-	similarity: number;
-}
-
 export default function Chat() {
 	const [question, setQuestion] = useState('');
 	const [answer, setAnswer] = useState<string | null>(null);
-	const [sources, setSources] = useState<Source[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 
@@ -34,7 +28,6 @@ export default function Chat() {
 
 			const data = await res.json();
 			setAnswer(data.answer);
-			setSources(data.sources ?? []);
 		} catch (err) {
 			setError(
 				err instanceof Error
@@ -72,11 +65,6 @@ export default function Chat() {
 					<div className="space-y-3 [&_strong]:font-semibold [&_em]:italic [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5">
 						<ReactMarkdown>{answer}</ReactMarkdown>
 					</div>
-					{sources.length > 0 && (
-						<p className="mt-3 text-xs text-stone-400">
-							Sources : {sources.map((s) => s.source).join(', ')}
-						</p>
-					)}
 				</div>
 			)}
 		</div>
