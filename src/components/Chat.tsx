@@ -9,6 +9,7 @@ export default function Chat() {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [justAnswered, setJustAnswered] = useState(false);
+	const [slow, setSlow] = useState(false);
 
 	useEffect(() => {
 		if (!answer) return;
@@ -16,6 +17,15 @@ export default function Chat() {
 		const timeout = setTimeout(() => setJustAnswered(false), 700);
 		return () => clearTimeout(timeout);
 	}, [answer]);
+
+	useEffect(() => {
+		if (!loading) {
+			setSlow(false);
+			return;
+		}
+		const timeout = setTimeout(() => setSlow(true), 5000);
+		return () => clearTimeout(timeout);
+	}, [loading]);
 
 	async function handleSubmit(e: FormEvent) {
 		e.preventDefault();
@@ -75,6 +85,12 @@ export default function Chat() {
 					)}
 				</button>
 			</form>
+
+			{loading && slow && (
+				<p className="mt-4 text-sm text-stone-600">
+					Premier message un peu lent ? Le serveur backend est en train de démarrer !
+				</p>
+			)}
 
 			{error && <p className="mt-4 text-red-600">{error}</p>}
 
