@@ -11,6 +11,10 @@ const experiences = [
 		place: 'DGFiP, Délégation à la Transformation du Numérique',
 		description:
 			"Accompagnement des projets IA à destination des agents, travaux sur chatbot pour particuliers. Assistance technique à la plateforme mettant à disposition les modèles LLM.",
+			press: {
+				label: "Le Monde : « Les usagers ne nous comprennent pas toujours » — les impôts font appel à l'IA pour être moins verbeux",
+				url: 'https://www.lemonde.fr/politique/article/2026/03/04/les-usagers-ne-nous-comprennent-pas-toujours-les-impots-font-appel-a-l-ia-pour-etre-moins-verbeux_6669552_823448.html',
+			},
 	},
 	{
 		period: '2022 — 2024',
@@ -100,6 +104,21 @@ const formations = [
 						<h3 class="font-semibold text-stone-900">{xp.title}</h3>
 						<p class="text-sm text-stone-600">{xp.place}</p>
 						<p class="mt-1 text-stone-700">{xp.description}</p>
+						{xp.press && (
+							<a
+								href={xp.press.url}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="mt-3 block rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900 transition hover:border-emerald-400 hover:bg-emerald-100"
+							>
+								<span class="block text-xs font-semibold uppercase tracking-wide text-emerald-700">
+									Projet mis en production — dans la presse
+								</span>
+								<span class="mt-1 block font-medium underline underline-offset-2">
+									{xp.press.label} ↗
+								</span>
+							</a>
+						)}
 					</div>
 				))}
 			</div>
