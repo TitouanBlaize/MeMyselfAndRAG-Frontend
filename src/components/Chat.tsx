@@ -69,7 +69,7 @@ export default function Chat() {
 						type="text"
 						value={question}
 						onChange={(e) => setQuestion(e.target.value)}
-						placeholder="Pose une question sur Titouan..."
+						placeholder="Que souhaites-tu savoir sur moi ?"
 						className="w-full rounded-lg border border-stone-300 px-4 py-2 transition-all duration-300 focus:scale-[1.01] focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-300/50 focus:shadow-[0_0_20px_-4px_rgba(16,185,129,0.6)]"
 					/>
 				</div>
@@ -88,7 +88,7 @@ export default function Chat() {
 
 			{loading && slow && (
 				<p className="mt-4 text-sm text-stone-600">
-					Votre première question prend du temps ? Le serveur backend RAG a un cold-start et est en train de redémarrer, les prochaines réponses iront plus vites ! Pendant ce temps, je vous invite à parcours mes expériences professionnelles ci-dessous.
+					La première réponse prend du temps ? Le serveur backend RAG a un cold-start et est en train de redémarrer, il faut compter 30 solides secondes. Les prochaines réponses iront plus vites ! Pendant ce temps, je t'invite à parcourir mes expériences professionnelles en dessous.
 				</p>
 			)}
 
