@@ -11,10 +11,18 @@ const experiences = [
 		place: 'Direction Générale des Finances Publiques (DGFiP)',
 		description:
 			"Création et encadrement de l'équipe des Forward Deployed Engineer. Accompagnement des projets IA à destination des agents, des applications internes, et des contribuables. Internalisation complète de la stack technique de l'infra GPU à son déploiement dans l'environnement DGFiP.",
-			press: {
+		links: [
+			{
+				kicker: 'Projet mis en production — dans la presse',
 				label: "Le Monde : « Les usagers ne nous comprennent pas toujours » — les impôts font appel à l'IA pour être moins verbeux",
 				url: 'https://www.lemonde.fr/politique/article/2026/03/04/les-usagers-ne-nous-comprennent-pas-toujours-les-impots-font-appel-a-l-ia-pour-etre-moins-verbeux_6669552_823448.html',
 			},
+			{
+				kicker: 'Outil en production',
+				label: 'Moteur de recherche impots.gouv.fr (recherche hybride, résumés générés par IA)',
+				url: 'https://www.impots.gouv.fr/recherche?key=&origin[]=impots&search_filter=Filtrer',
+			},
+		],
 	},
 	{
 		period: '2022 — 2024',
@@ -22,6 +30,13 @@ const experiences = [
 		place: 'Health Data Hub',
 		description:
 			"Intégration à une équipe de l'hopital Saint-Antoine pour développer un algorithme de détection d'hépatites B et C dans les bases de données de l'assurance maladie (SNDS).",
+		links: [
+			{
+				kicker: 'Publication',
+				label: "Algorithmes de ciblage de patients atteints d'hépatite virale",
+				url: 'https://www.health-data-hub.fr/bibliotheque-ouverte-algorithmes-sante/algorithmes-de-ciblage-de-patients-atteints-dhepatite-virale',
+			},
+		],
 	},
 	{
 		period: '2021 — 2022',
@@ -29,6 +44,13 @@ const experiences = [
 		place: "SSP Lab de l'INSEE",
 		description:
 			"Préfigurateur du réseau des Data Scientists du Service Statistique Public.",
+		links: [
+			{
+				kicker: 'Réseau initié',
+				label: 'SSP Hub — réseau des Data Scientists du Service Statistique Public',
+				url: 'https://ssphub.fr/',
+			},
+		],
 	},
 	{
 		period: '2019 — 2021',
@@ -36,6 +58,13 @@ const experiences = [
 		place: 'Dares, service statistique du ministère du Travail',
 		description:
 			"Suivi conjoncturel et évaluation économétrique des politiques de l'emploi. Évaluation de Territoires Zéro Chômeur de Longue Durée. Co-encadrement de 9 chargés d'études.",
+		links: [
+			{
+				kicker: 'Publication',
+				label: "Évaluation de l'expérimentation Territoires Zéro Chômeur de Longue Durée",
+				url: 'https://dares.travail-emploi.gouv.fr/publications/experimentation-territoires-zero-chomeur-de-longue-duree',
+			},
+		],
 	},
 	{
 		period: '2016 — 2018',
@@ -101,21 +130,21 @@ const formations = [
 						<h3 class="font-semibold text-stone-900">{xp.title}</h3>
 						<p class="text-sm text-stone-600">{xp.place}</p>
 						<p class="mt-1 text-stone-700">{xp.description}</p>
-						{xp.press && (
+						{xp.links?.map((link) => (
 							<a
-								href={xp.press.url}
+								href={link.url}
 								target="_blank"
 								rel="noopener noreferrer"
 								class="mt-3 block rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900 transition hover:border-emerald-400 hover:bg-emerald-100"
 							>
 								<span class="block text-xs font-semibold uppercase tracking-wide text-emerald-700">
-									Projet mis en production — dans la presse
+									{link.kicker}
 								</span>
 								<span class="mt-1 block font-medium underline underline-offset-2">
-									{xp.press.label} ↗
+									{link.label} ↗
 								</span>
 							</a>
-						)}
+						))}
 					</div>
 				))}
 			</div>
