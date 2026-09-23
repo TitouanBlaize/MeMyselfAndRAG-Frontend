@@ -88,7 +88,7 @@ export default function Chat() {
 
 			{loading && slow && (
 				<p className="mt-4 text-sm text-stone-600">
-					Premier message un peu lent ? Le serveur backend est en train de démarrer !
+					Votre première question prend du temps ? Le serveur backend RAG a un cold-start et est en train de redémarrer, les prochaines réponses iront plus vites ! Pendant ce temps, je vous invite à parcours mes expériences professionnelles ci-dessous.
 				</p>
 			)}
 

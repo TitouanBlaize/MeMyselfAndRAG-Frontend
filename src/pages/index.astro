@@ -7,10 +7,10 @@ import photo from '../assets/titouan.jpg';
 const experiences = [
 	{
 		period: '2024 — auj.',
-		title: 'Lead Data Scientist',
-		place: 'DGFiP, Délégation à la Transformation du Numérique',
+		title: 'Lead AI Engineer & Data Scientist',
+		place: 'Direction Générale des Finances Publiques (DGFiP)',
 		description:
-			"Accompagnement des projets IA à destination des agents, travaux sur chatbot pour particuliers. Assistance technique à la plateforme mettant à disposition les modèles LLM.",
+			"Création et encadrement de l'équipe des Forward Deployed Engineer. Accompagnement des projets IA à destination des agents, des applications internes, et des contribuables. Internalisation complète de la stack technique de l'infra GPU à son déploiement dans l'environnement DGFiP.",
 			press: {
 				label: "Le Monde : « Les usagers ne nous comprennent pas toujours » — les impôts font appel à l'IA pour être moins verbeux",
 				url: 'https://www.lemonde.fr/politique/article/2026/03/04/les-usagers-ne-nous-comprennent-pas-toujours-les-impots-font-appel-a-l-ia-pour-etre-moins-verbeux_6669552_823448.html',
@@ -21,7 +21,7 @@ const experiences = [
 		title: 'Data Scientist',
 		place: 'Health Data Hub',
 		description:
-			'Travaux sur le NLP en santé (pseudonymisation, structuration information, webscraping) et projet avec un médecin de l\'hôpital Saint-Antoine (détection hépatite).',
+			"Intégration à une équipe de l'hopital Saint-Antoine pour développer un algorithme de détection d'hépatites B et C dans les bases de données de l'assurance maladie (SNDS).",
 	},
 	{
 		period: '2021 — 2022',
@@ -48,25 +48,22 @@ const experiences = [
 
 const formations = [
 	{
-		period: '2015 — 2016',
-		title: 'Master International Trade, Finance and Development',
-		place: 'Barcelona GSE / Pompeu Fabra',
-		description: 'Cursus en anglais.',
-	},
-	{
-		period: '2014 — 2015',
-		title: "Corps des administrateurs de l'INSEE",
-		place: 'ENSAE ParisTech',
-		description:
-			'Projet au bureau Polsoc3 de la DG Trésor sur les déterminants de la pauvreté.',
-	},
-	{
 		period: '2011 — 2015',
 		title: 'École Polytechnique',
 		place: null,
-		description:
-			'M1 en économie appliquée à l\'environnement : « Sciences pour les Défis de l\'Environnement ».',
 	},
+	{
+		period: '2014 — 2015',
+		title: "ENSAE ParisTech",
+		place: "Ecole d'application des administrateurs de l'INSEE"
+	},
+	{
+		period: '2015 — 2016',
+		title: 'Barcelona GSE / Pompeu Fabra',
+		place: 'Cursus en anglais. Master International Trade, Finance and Development',
+	},
+
+
 ];
 ---
 
@@ -132,7 +129,6 @@ const formations = [
 						<p class="text-sm font-medium text-stone-500">{f.period}</p>
 						<h3 class="font-semibold text-stone-900">{f.title}</h3>
 						{f.place && <p class="text-sm text-stone-600">{f.place}</p>}
-						<p class="mt-1 text-stone-700">{f.description}</p>
 					</div>
 				))}
 			</div>
