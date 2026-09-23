@@ -3,12 +3,32 @@ import ReactMarkdown from 'react-markdown';
 
 const API_URL = import.meta.env.PUBLIC_API_URL as string;
 
+const PLACEHOLDERS = [
+	'Que souhaites-tu savoir sur moi ?',
+	'Quelle est ton expérience en IA générative ?',
+	'Parle-moi de tes projets en data science',
+	'Quelles sont tes compétences techniques ?',
+	'Pourquoi devrais-je te recruter ?',
+];
+
 export default function Chat() {
 	const [question, setQuestion] = useState('');
 	const [answer, setAnswer] = useState<string | null>(null);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [justAnswered, setJustAnswered] = useState(false);
+	const [slow, setSlow] = useState(false);
+	const [placeholderTick, setPlaceholderTick] = useState(0);
+
+	useEffect(() => {
+		if (question) return;
+		const interval = setInterval(() => setPlaceholderTick((t) => t + 1), 2000);
+		return () => clearInterval(interval);
+	}, [question]);
+
+	const currentPlaceholder = PLACEHOLDERS[placeholderTick % PLACEHOLDERS.length];
+	const previousPlaceholder =
+		placeholderTick > 0 ? PLACEHOLDERS[(placeholderTick - 1) % PLACEHOLDERS.length] : null;
 
 	useEffect(() => {
 		if (!answer) return;
@@ -16,6 +36,15 @@ export default function Chat() {
 		const timeout = setTimeout(() => setJustAnswered(false), 700);
 		return () => clearTimeout(timeout);
 	}, [answer]);
+
+	useEffect(() => {
+		if (!loading) {
+			setSlow(false);
+			return;
+		}
+		const timeout = setTimeout(() => setSlow(true), 5000);
+		return () => clearTimeout(timeout);
+	}, [loading]);
 
 	async function handleSubmit(e: FormEvent) {
 		e.preventDefault();
@@ -51,7 +80,7 @@ export default function Chat() {
 		<div className="w-full max-w-xl mx-auto">
 			<form onSubmit={handleSubmit} className="flex gap-2">
 				<div
-					className={`flex-1 rounded-lg transition-shadow duration-300 ${
+					className={`group relative flex-1 rounded-lg transition-shadow duration-300 ${
 						loading ? 'animate-[glow-pulse_1.4s_ease-in-out_infinite]' : ''
 					} ${justAnswered ? 'animate-[success-flash_0.7s_ease-out]' : ''}`}
 				>
@@ -59,9 +88,30 @@ export default function Chat() {
 						type="text"
 						value={question}
 						onChange={(e) => setQuestion(e.target.value)}
-						placeholder="Pose une question sur Titouan..."
+						aria-label={PLACEHOLDERS[0]}
 						className="w-full rounded-lg border border-stone-300 px-4 py-2 transition-all duration-300 focus:scale-[1.01] focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-300/50 focus:shadow-[0_0_20px_-4px_rgba(16,185,129,0.6)]"
 					/>
+					{!question && (
+						<div
+							aria-hidden="true"
+							className="pointer-events-none absolute inset-y-0 inset-x-[17px] overflow-hidden text-stone-400 transition-transform duration-300 group-focus-within:scale-[1.01]"
+						>
+							{previousPlaceholder && (
+								<span
+									key={`out-${placeholderTick}`}
+									className="absolute inset-0 flex items-center animate-[placeholder-out_0.5s_ease-in-out_forwards] motion-reduce:hidden"
+								>
+									<span className="truncate">{previousPlaceholder}</span>
+								</span>
+							)}
+							<span
+								key={`in-${placeholderTick}`}
+								className="absolute inset-0 flex items-center animate-[placeholder-in_0.5s_ease-in-out] motion-reduce:animate-none"
+							>
+								<span className="truncate">{currentPlaceholder}</span>
+							</span>
+						</div>
+					)}
 				</div>
 				<button
 					type="submit"
@@ -75,6 +125,12 @@ export default function Chat() {
 					)}
 				</button>
 			</form>
+
+			{loading && slow && (
+				<p className="mt-4 text-sm text-stone-600">
+					La première réponse prend du temps ? Le serveur backend RAG a un cold-start et est en train de redémarrer, il faut compter 30 solides secondes. Les prochaines réponses iront plus vites ! Pendant ce temps, je t'invite à parcourir mes expériences professionnelles en dessous.
+				</p>
+			)}
 
 			{error && <p className="mt-4 text-red-600">{error}</p>}
 

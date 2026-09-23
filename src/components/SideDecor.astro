@@ -1,0 +1,80 @@
+---
+// Purely decorative, abstract shapes filling the empty side gutters on wide screens.
+// Hidden below `lg`, where the content already spans the viewport.
+
+const W = 300;
+const H = 1000;
+
+// Flowing "contour" lines: offset copies of a gently wavy vertical curve.
+function contour(i: number, phase: number) {
+	const base = 30 + i * 18;
+	const points: string[] = [];
+	for (let y = -20; y <= H + 20; y += 20) {
+		const x =
+			base +
+			22 * Math.sin(y / 140 + phase + i * 0.18) +
+			10 * Math.sin(y / 53 + phase * 2 + i * 0.35);
+		points.push(`${x.toFixed(1)},${y}`);
+	}
+	return `M${points.join(' L')}`;
+}
+
+const sides = [
+	{ key: 'left', phase: 0, class: 'left-0' },
+	{ key: 'right', phase: 2.1, class: 'right-0 -scale-x-100' },
+];
+
+const lines = Array.from({ length: 7 }, (_, i) => i);
+
+// Small dot patch, like a faint grid texture.
+const dots: { x: number; y: number }[] = [];
+for (let r = 0; r < 6; r++) {
+	for (let c = 0; c < 5; c++) {
+		dots.push({ x: 170 + c * 16, y: 470 + r * 16 });
+	}
+}
+---
+
+<div aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10 hidden overflow-hidden lg:block">
+	{sides.map((side) => (
+		<svg
+			class={`absolute top-0 h-full w-[calc((100%-48rem)/2)] ${side.class}`}
+			viewBox={`0 0 ${W} ${H}`}
+			preserveAspectRatio="xMinYMid slice"
+		>
+			<defs>
+				<radialGradient id={`blob-${side.key}`}>
+					<stop offset="0%" stop-color="var(--color-emerald-100)" stop-opacity="0.9" />
+					<stop offset="100%" stop-color="var(--color-emerald-100)" stop-opacity="0" />
+				</radialGradient>
+				<linearGradient id={`fade-${side.key}`} x1="0" x2="1" y1="0" y2="0">
+					<stop offset="0%" stop-color="white" stop-opacity="1" />
+					<stop offset="70%" stop-color="white" stop-opacity="0.6" />
+					<stop offset="100%" stop-color="white" stop-opacity="0" />
+				</linearGradient>
+				<mask id={`mask-${side.key}`}>
+					<rect width={W} height={H} fill={`url(#fade-${side.key})`} />
+				</mask>
+			</defs>
+
+			<circle cx="70" cy={side.key === 'left' ? 200 : 780} r="170" fill={`url(#blob-${side.key})`} />
+			<circle cx="190" cy={side.key === 'left' ? 820 : 260} r="120" fill={`url(#blob-${side.key})`} />
+
+			<g mask={`url(#mask-${side.key})`} fill="none" stroke-linecap="round">
+				{lines.map((i) => (
+					<path
+						d={contour(i, side.phase)}
+						class={i % 3 === 0 ? 'stroke-emerald-300/50' : 'stroke-emerald-200/60'}
+						stroke-width="1"
+					/>
+				))}
+			</g>
+
+			<g class="fill-stone-300/70">
+				{dots.map((d) => (
+					<circle cx={d.x} cy={side.key === 'left' ? d.y : H - d.y} r="1.4" />
+				))}
+			</g>
+		</svg>
+	))}
+</div>
