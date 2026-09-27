@@ -98,12 +98,18 @@ const formations = [
 
 <Layout title="Titouan Blaize">
 	<main class="mx-auto max-w-3xl px-6 py-16">
-		<header class="mb-14 flex flex-col-reverse items-center gap-8 sm:flex-row sm:items-center sm:justify-between">
+		<header class="mb-10 flex flex-col-reverse items-center gap-8 sm:flex-row sm:items-center sm:justify-between">
 			<div>
 				<h1 class="text-4xl font-bold text-stone-900">Titouan Blaize</h1>
 				<p class="mt-2 text-stone-600">
 					X-INSEE - AI Engineer & Economist
 				</p>
+				<a
+					href="#chat"
+					class="mt-5 inline-flex items-center gap-2 rounded-full bg-emerald-700 px-5 py-2.5 text-sm font-medium text-white shadow-md shadow-emerald-900/20 transition hover:-translate-y-0.5 hover:bg-emerald-600"
+				>
+					Interroge mon assistant IA <span aria-hidden="true">↓</span>
+				</a>
 			</div>
 			<div class="h-32 w-32 shrink-0 overflow-hidden rounded-full ring-4 ring-white shadow-md sm:h-40 sm:w-40">
 				<Image
@@ -116,9 +122,26 @@ const formations = [
 			</div>
 		</header>
 
-		<section class="mb-16">
-			<h2 class="text-xl font-semibold mb-4 text-emerald-800">Pose-moi une question</h2>
-			<Chat client:load />
+		<section
+			id="chat"
+			class="relative mb-16 scroll-mt-8 overflow-hidden rounded-3xl border border-emerald-200 bg-gradient-to-br from-emerald-50 via-white to-emerald-100/70 px-5 py-8 shadow-xl shadow-emerald-900/10 sm:-mx-6 sm:px-10 sm:py-10"
+		>
+			<div aria-hidden="true" class="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-emerald-300/30 blur-3xl"></div>
+			<div aria-hidden="true" class="pointer-events-none absolute -bottom-20 -left-16 h-48 w-48 rounded-full bg-emerald-200/40 blur-3xl"></div>
+			<div class="relative">
+				<span class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white/80 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-emerald-700">
+					<span class="relative flex h-2 w-2">
+						<span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75 motion-reduce:hidden"></span>
+						<span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
+					</span>
+					Assistant IA · RAG
+				</span>
+				<h2 class="mt-4 text-3xl font-bold text-emerald-900 sm:text-4xl">Pose-moi une question</h2>
+				<p class="mt-3 mb-6 max-w-xl text-stone-600">
+					Mon assistant IA connaît mon parcours, mes projets et mes publications. Demande-lui ce que tu veux savoir : il te répond à ma place, en quelques secondes.
+				</p>
+				<Chat client:load />
+			</div>
 		</section>
 
 		<section class="mb-16">

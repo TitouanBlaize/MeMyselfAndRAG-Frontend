@@ -11,6 +11,12 @@ const PLACEHOLDERS = [
 	'Pourquoi devrais-je te recruter ?',
 ];
 
+const SUGGESTIONS = [
+	'Quels projets IA as-tu mis en production ?',
+	'Quelle est ton expérience en IA générative ?',
+	'Pourquoi devrais-je te recruter ?',
+];
+
 export default function Chat() {
 	const [question, setQuestion] = useState('');
 	const [answer, setAnswer] = useState<string | null>(null);
@@ -46,9 +52,13 @@ export default function Chat() {
 		return () => clearTimeout(timeout);
 	}, [loading]);
 
-	async function handleSubmit(e: FormEvent) {
+	function handleSubmit(e: FormEvent) {
 		e.preventDefault();
-		if (!question.trim() || loading) return;
+		ask(question);
+	}
+
+	async function ask(q: string) {
+		if (!q.trim() || loading) return;
 
 		setLoading(true);
 		setError(null);
@@ -58,7 +68,7 @@ export default function Chat() {
 			const res = await fetch(`${API_URL}/chat`, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ question }),
+				body: JSON.stringify({ question: q }),
 			});
 
 			if (!res.ok) throw new Error(`Le serveur a répondu ${res.status}`);
@@ -77,10 +87,10 @@ export default function Chat() {
 	}
 
 	return (
-		<div className="w-full max-w-xl mx-auto">
-			<form onSubmit={handleSubmit} className="flex gap-2">
+		<div className="w-full">
+			<form onSubmit={handleSubmit} className="flex flex-col gap-2 sm:flex-row">
 				<div
-					className={`group relative flex-1 rounded-lg transition-shadow duration-300 ${
+					className={`group relative flex-1 rounded-xl transition-shadow duration-300 ${
 						loading ? 'animate-[glow-pulse_1.4s_ease-in-out_infinite]' : ''
 					} ${justAnswered ? 'animate-[success-flash_0.7s_ease-out]' : ''}`}
 				>
@@ -89,7 +99,7 @@ export default function Chat() {
 						value={question}
 						onChange={(e) => setQuestion(e.target.value)}
 						aria-label={PLACEHOLDERS[0]}
-						className="w-full rounded-lg border border-stone-300 px-4 py-2 transition-all duration-300 focus:scale-[1.01] focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-300/50 focus:shadow-[0_0_20px_-4px_rgba(16,185,129,0.6)]"
+						className="w-full rounded-xl border border-emerald-200 bg-white px-4 py-3 text-base shadow-sm transition-all duration-300 focus:scale-[1.01] focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-300/50 focus:shadow-[0_0_20px_-4px_rgba(16,185,129,0.6)]"
 					/>
 					{!question && (
 						<div
@@ -116,15 +126,35 @@ export default function Chat() {
 				<button
 					type="submit"
 					disabled={loading}
-					className="inline-flex items-center justify-center rounded-lg bg-emerald-700 px-4 py-2 text-white transition-all duration-200 hover:scale-105 hover:bg-emerald-600 hover:shadow-lg hover:shadow-emerald-300/50 active:scale-95 disabled:opacity-50 disabled:hover:scale-100"
+					className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-emerald-700 px-5 py-3 font-medium text-white shadow-sm transition-all duration-200 hover:scale-105 hover:bg-emerald-600 hover:shadow-lg hover:shadow-emerald-300/50 active:scale-95 disabled:opacity-50 disabled:hover:scale-100"
 				>
 					{loading ? (
 						<span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
 					) : (
-						'Envoyer'
+						<>
+							Envoyer <span aria-hidden="true">→</span>
+						</>
 					)}
 				</button>
 			</form>
+
+			<div className="mt-4 flex flex-wrap items-center gap-2">
+				<span className="text-sm text-stone-500">Idées :</span>
+				{SUGGESTIONS.map((s) => (
+					<button
+						key={s}
+						type="button"
+						disabled={loading}
+						onClick={() => {
+							setQuestion(s);
+							ask(s);
+						}}
+						className="rounded-full border border-emerald-200 bg-white/80 px-3 py-1.5 text-sm text-emerald-800 transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-400 hover:bg-emerald-50 hover:shadow-md hover:shadow-emerald-900/10 active:translate-y-0 disabled:opacity-50 disabled:hover:translate-y-0"
+					>
+						{s}
+					</button>
+				))}
+			</div>
 
 			{loading && slow && (
 				<p className="mt-4 text-sm text-stone-600">
