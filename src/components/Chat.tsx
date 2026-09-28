@@ -99,7 +99,7 @@ export default function Chat() {
 						value={question}
 						onChange={(e) => setQuestion(e.target.value)}
 						aria-label={PLACEHOLDERS[0]}
-						className="w-full rounded-xl border border-emerald-200 bg-white px-4 py-3 text-base shadow-sm transition-all duration-300 focus:scale-[1.01] focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-300/50 focus:shadow-[0_0_20px_-4px_rgba(16,185,129,0.6)]"
+						className="w-full rounded-xl border border-emerald-200 bg-white px-4 py-2.5 text-base transition-all duration-300 focus:scale-[1.01] focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-300/50 focus:shadow-[0_0_20px_-4px_rgba(16,185,129,0.6)]"
 					/>
 					{!question && (
 						<div
@@ -126,7 +126,7 @@ export default function Chat() {
 				<button
 					type="submit"
 					disabled={loading}
-					className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-emerald-700 px-5 py-3 font-medium text-white shadow-sm transition-all duration-200 hover:scale-105 hover:bg-emerald-600 hover:shadow-lg hover:shadow-emerald-300/50 active:scale-95 disabled:opacity-50 disabled:hover:scale-100"
+					className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-emerald-700 px-5 py-2.5 font-medium text-white transition-all duration-200 hover:scale-105 hover:bg-emerald-600 hover:shadow-lg hover:shadow-emerald-300/50 active:scale-95 disabled:opacity-50 disabled:hover:scale-100"
 				>
 					{loading ? (
 						<span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
@@ -138,7 +138,7 @@ export default function Chat() {
 				</button>
 			</form>
 
-			<div className="mt-4 flex flex-wrap items-center gap-2">
+			<div className="mt-3 flex flex-wrap items-center gap-2">
 				<span className="text-sm text-stone-500">Idées :</span>
 				{SUGGESTIONS.map((s) => (
 					<button
@@ -149,7 +149,7 @@ export default function Chat() {
 							setQuestion(s);
 							ask(s);
 						}}
-						className="rounded-full border border-emerald-200 bg-white/80 px-3 py-1.5 text-sm text-emerald-800 transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-400 hover:bg-emerald-50 hover:shadow-md hover:shadow-emerald-900/10 active:translate-y-0 disabled:opacity-50 disabled:hover:translate-y-0"
+						className="rounded-full border border-stone-200 bg-white px-3 py-1 text-sm text-stone-600 transition-colors duration-200 hover:border-emerald-300 hover:text-emerald-800 disabled:opacity-50"
 					>
 						{s}
 					</button>

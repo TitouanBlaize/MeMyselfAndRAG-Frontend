@@ -106,7 +106,7 @@ const formations = [
 				</p>
 				<a
 					href="#chat"
-					class="mt-5 inline-flex items-center gap-2 rounded-full bg-emerald-700 px-5 py-2.5 text-sm font-medium text-white shadow-md shadow-emerald-900/20 transition hover:-translate-y-0.5 hover:bg-emerald-600"
+					class="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-emerald-700 underline decoration-emerald-300 underline-offset-4 transition hover:text-emerald-600 hover:decoration-emerald-500"
 				>
 					Interroge mon assistant IA <span aria-hidden="true">↓</span>
 				</a>
@@ -124,20 +124,18 @@ const formations = [
 
 		<section
 			id="chat"
-			class="relative mb-16 scroll-mt-8 overflow-hidden rounded-3xl border border-emerald-200 bg-gradient-to-br from-emerald-50 via-white to-emerald-100/70 px-5 py-8 shadow-xl shadow-emerald-900/10 sm:-mx-6 sm:px-10 sm:py-10"
+			class="mb-16 scroll-mt-8 rounded-2xl border border-emerald-100 bg-gradient-to-b from-emerald-50/70 to-white px-5 py-6 shadow-sm sm:px-8 sm:py-8"
 		>
-			<div aria-hidden="true" class="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-emerald-300/30 blur-3xl"></div>
-			<div aria-hidden="true" class="pointer-events-none absolute -bottom-20 -left-16 h-48 w-48 rounded-full bg-emerald-200/40 blur-3xl"></div>
-			<div class="relative">
-				<span class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white/80 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-emerald-700">
+			<div>
+				<span class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-emerald-700">
 					<span class="relative flex h-2 w-2">
 						<span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75 motion-reduce:hidden"></span>
 						<span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
 					</span>
 					Assistant IA · RAG
 				</span>
-				<h2 class="mt-4 text-3xl font-bold text-emerald-900 sm:text-4xl">Pose-moi une question</h2>
-				<p class="mt-3 mb-6 max-w-xl text-stone-600">
+				<h2 class="mt-2 text-2xl font-semibold text-emerald-800">Pose-moi une question</h2>
+				<p class="mt-2 mb-5 max-w-xl text-stone-600">
 					Mon assistant IA connaît mon parcours, mes projets et mes publications. Demande-lui ce que tu veux savoir : il te répond à ma place, en quelques secondes.
 				</p>
 				<Chat client:load />
