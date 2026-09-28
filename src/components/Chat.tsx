@@ -17,14 +17,53 @@ const SUGGESTIONS = [
 	'Pourquoi devrais-je te recruter ?',
 ];
 
+type SSEEvent = { event: string; data: any };
+
+// One SSE event block ("event: x\ndata: {...}") → { event, data }.
+function parseSSEEvent(raw: string): SSEEvent | null {
+	let event = 'message';
+	const dataLines: string[] = [];
+	for (const line of raw.split('\n')) {
+		if (line.startsWith('event:')) event = line.slice(6).trim();
+		else if (line.startsWith('data:')) dataLines.push(line.slice(5).replace(/^ /, ''));
+	}
+	if (dataLines.length === 0) return null;
+	return { event, data: JSON.parse(dataLines.join('\n')) };
+}
+
+// EventSource only supports GET, so /chat/stream (POST) is read by hand from the fetch body.
+async function* readSSE(body: ReadableStream<Uint8Array>): AsyncGenerator<SSEEvent> {
+	const reader = body.pipeThrough(new TextDecoderStream()).getReader();
+	let buffer = '';
+	while (true) {
+		const { value, done } = await reader.read();
+		if (done) break;
+		buffer += value;
+		const blocks = buffer.split('\n\n');
+		buffer = blocks.pop() ?? ''; // keep the incomplete trailing event
+		for (const raw of blocks) {
+			const parsed = parseSSEEvent(raw);
+			if (parsed) yield parsed;
+		}
+	}
+	const parsed = buffer.trim() ? parseSSEEvent(buffer) : null;
+	if (parsed) yield parsed;
+}
+
 export default function Chat() {
 	const [question, setQuestion] = useState('');
 	const [answer, setAnswer] = useState<string | null>(null);
+	const [answerId, setAnswerId] = useState(0);
+	const [answeredTick, setAnsweredTick] = useState(0);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [justAnswered, setJustAnswered] = useState(false);
 	const [slow, setSlow] = useState(false);
 	const [placeholderTick, setPlaceholderTick] = useState(0);
+
+	// Waiting for the first token (retrieval + cold start) vs. text already flowing in.
+	const waiting = loading && !answer;
+	const streaming = loading && !!answer;
 
 	useEffect(() => {
 		if (question) return;
@@ -37,20 +76,20 @@ export default function Chat() {
 		placeholderTick > 0 ? PLACEHOLDERS[(placeholderTick - 1) % PLACEHOLDERS.length] : null;
 
 	useEffect(() => {
-		if (!answer) return;
+		if (!answeredTick) return;
 		setJustAnswered(true);
 		const timeout = setTimeout(() => setJustAnswered(false), 700);
 		return () => clearTimeout(timeout);
-	}, [answer]);
+	}, [answeredTick]);
 
 	useEffect(() => {
-		if (!loading) {
+		if (!waiting) {
 			setSlow(false);
 			return;
 		}
 		const timeout = setTimeout(() => setSlow(true), 5000);
 		return () => clearTimeout(timeout);
-	}, [loading]);
+	}, [waiting]);
 
 	function handleSubmit(e: FormEvent) {
 		e.preventDefault();
@@ -63,18 +102,30 @@ export default function Chat() {
 		setLoading(true);
 		setError(null);
 		setAnswer(null);
+		setAnswerId((id) => id + 1);
 
 		try {
-			const res = await fetch(`${API_URL}/chat`, {
+			const res = await fetch(`${API_URL}/chat/stream`, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ question: q }),
 			});
 
-			if (!res.ok) throw new Error(`Le serveur a répondu ${res.status}`);
+			if (!res.ok || !res.body) throw new Error(`Le serveur a répondu ${res.status}`);
 
-			const data = await res.json();
-			setAnswer(data.answer);
+			let finished = false;
+			for await (const { event, data } of readSSE(res.body)) {
+				if (event === 'delta') {
+					setAnswer((a) => (a ?? '') + data.text);
+				} else if (event === 'error') {
+					// Sent mid-stream (status is already 200): keep the partial answer, flag the failure.
+					throw new Error('La génération de la réponse a échoué, réessaie dans un instant.');
+				} else if (event === 'done') {
+					finished = true;
+				}
+			}
+			if (!finished) throw new Error('La réponse a été interrompue, réessaie dans un instant.');
+			setAnsweredTick((t) => t + 1);
 		} catch (err) {
 			setError(
 				err instanceof Error
@@ -156,25 +207,36 @@ export default function Chat() {
 				))}
 			</div>
 
-			{loading && slow && (
+			{waiting && slow && (
 				<p className="mt-4 text-sm text-stone-600">
 					La première réponse prend du temps ? Le serveur backend RAG a un cold-start et est en train de redémarrer, il faut compter 30 solides secondes. Les prochaines réponses iront plus vites ! Pendant ce temps, je t'invite à parcourir mes expériences professionnelles en dessous.
 				</p>
 			)}
 
-			{error && <p className="mt-4 text-red-600">{error}</p>}
-
 			{answer && (
 				<div
-					key={answer}
+					key={answerId}
+					aria-busy={streaming}
 					className="mt-4 animate-[answer-in_0.5s_cubic-bezier(0.16,1,0.3,1)] overflow-hidden rounded-lg border border-emerald-100 bg-white p-4 shadow-lg shadow-emerald-900/5"
 				>
-					<div className="-mx-4 -mt-4 mb-3 h-1 animate-[shimmer-sweep_1.1s_ease-in-out] bg-gradient-to-r from-emerald-200 via-emerald-500 to-emerald-200 bg-[length:200%_100%]" />
-					<div className="space-y-3 [&_strong]:font-semibold [&_em]:italic [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5">
+					<div
+						className={`-mx-4 -mt-4 mb-3 h-1 bg-gradient-to-r from-emerald-200 via-emerald-500 to-emerald-200 bg-[length:200%_100%] ${
+							streaming
+								? 'animate-[shimmer-sweep_1.4s_linear_infinite]'
+								: 'animate-[shimmer-sweep_1.1s_ease-in-out]'
+						}`}
+					/>
+					<div
+						className={`space-y-3 [&_strong]:font-semibold [&_em]:italic [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 ${
+							streaming ? 'streaming-caret' : ''
+						}`}
+					>
 						<ReactMarkdown>{answer}</ReactMarkdown>
 					</div>
 				</div>
 			)}
+
+			{error && <p className="mt-4 text-red-600">{error}</p>}
 		</div>
 	);
 }
