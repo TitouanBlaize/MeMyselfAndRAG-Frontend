@@ -169,7 +169,7 @@ export default function Chat() {
 					key={answer}
 					className="mt-4 animate-[answer-in_0.5s_cubic-bezier(0.16,1,0.3,1)] overflow-hidden rounded-lg border border-emerald-100 bg-white p-4 shadow-lg shadow-emerald-900/5"
 				>
-					<div className="-mx-4 -mt-4 mb-3 h-1 animate-[shimmer-sweep_1.1s_ease-in-out] bg-gradient-to-r from-emerald-200 via-emerald-500 to-emerald-200 bg-[length:200%_100%]" />
+					<div className="-mx-4 -mt-4 mb-3 h-1 animate-[shimmer-sweep_1.1s_ease-in-out] bg-gradient-to-r from-emerald-200 via-amber-400 to-emerald-200 bg-[length:200%_100%]" />
 					<div className="space-y-3 [&_strong]:font-semibold [&_em]:italic [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5">
 						<ReactMarkdown>{answer}</ReactMarkdown>
 					</div>

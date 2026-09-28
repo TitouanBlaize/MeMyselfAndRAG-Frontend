@@ -47,6 +47,10 @@ for (let r = 0; r < 6; r++) {
 					<stop offset="0%" stop-color="var(--color-emerald-100)" stop-opacity="0.9" />
 					<stop offset="100%" stop-color="var(--color-emerald-100)" stop-opacity="0" />
 				</radialGradient>
+				<radialGradient id={`warm-${side.key}`}>
+					<stop offset="0%" stop-color="var(--color-amber-100)" stop-opacity="0.8" />
+					<stop offset="100%" stop-color="var(--color-amber-100)" stop-opacity="0" />
+				</radialGradient>
 				<linearGradient id={`fade-${side.key}`} x1="0" x2="1" y1="0" y2="0">
 					<stop offset="0%" stop-color="white" stop-opacity="1" />
 					<stop offset="70%" stop-color="white" stop-opacity="0.6" />
@@ -58,7 +62,7 @@ for (let r = 0; r < 6; r++) {
 			</defs>
 
 			<circle cx="70" cy={side.key === 'left' ? 200 : 780} r="170" fill={`url(#blob-${side.key})`} />
-			<circle cx="190" cy={side.key === 'left' ? 820 : 260} r="120" fill={`url(#blob-${side.key})`} />
+			<circle cx="190" cy={side.key === 'left' ? 820 : 260} r="120" fill={`url(#warm-${side.key})`} />
 
 			<g mask={`url(#mask-${side.key})`} fill="none" stroke-linecap="round">
 				{lines.map((i) => (
