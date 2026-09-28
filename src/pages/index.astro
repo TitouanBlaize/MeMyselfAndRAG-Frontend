@@ -106,7 +106,7 @@ const formations = [
 				</p>
 				<a
 					href="#chat"
-					class="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-emerald-700 underline decoration-amber-400 underline-offset-4 transition hover:text-emerald-600 hover:decoration-amber-500"
+					class="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-emerald-700 underline decoration-emerald-300 underline-offset-4 transition hover:text-emerald-600 hover:decoration-emerald-500"
 				>
 					Interroge mon assistant IA <span aria-hidden="true">↓</span>
 				</a>
@@ -146,9 +146,8 @@ const formations = [
 			<h2 class="text-xl font-semibold mb-4 text-emerald-800">Expériences professionnelles</h2>
 			<div class="space-y-6">
 				{experiences.map((xp) => (
-					<div class="relative border-l-2 border-emerald-200 pl-4">
-						<span aria-hidden="true" class="absolute -left-[6px] top-[5px] h-2.5 w-2.5 rounded-full bg-amber-400 ring-2 ring-stone-50"></span>
-						<p class="text-sm font-medium text-stone-500">{xp.period}</p>
+					<div class="border-l-2 border-emerald-200 pl-4">
+						<p class="mb-1 inline-block rounded-full border border-amber-200 bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-stone-600">{xp.period}</p>
 						<h3 class="font-semibold text-stone-900">{xp.title}</h3>
 						<p class="text-sm text-stone-600">{xp.place}</p>
 						<p class="mt-1 text-stone-700">{xp.description}</p>
@@ -176,9 +175,8 @@ const formations = [
 			<h2 class="text-xl font-semibold mb-4 text-emerald-800">Formation</h2>
 			<div class="space-y-6">
 				{formations.map((f) => (
-					<div class="relative border-l-2 border-emerald-200 pl-4">
-						<span aria-hidden="true" class="absolute -left-[6px] top-[5px] h-2.5 w-2.5 rounded-full bg-amber-400 ring-2 ring-stone-50"></span>
-						<p class="text-sm font-medium text-stone-500">{f.period}</p>
+					<div class="border-l-2 border-emerald-200 pl-4">
+						<p class="mb-1 inline-block rounded-full border border-amber-200 bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-stone-600">{f.period}</p>
 						<h3 class="font-semibold text-stone-900">{f.title}</h3>
 						{f.place && <p class="text-sm text-stone-600">{f.place}</p>}
 					</div>
